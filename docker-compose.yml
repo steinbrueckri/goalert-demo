@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_DB: goalert
+      POSTGRES_PASSWORD: goalert
+      POSTGRES_USER: goalert
+    restart: unless-stopped
+    volumes:
+      - ./postgresql-data:/var/lib/postgresql/data
+
+  goalert:
+    image: goalert/goalert
+    ports:
+      - 8081:8081
+    environment:
+      - GOALERT_DB_URL=postgres://goalert:goalert@db/goalert
+      - GOALERT_DATA_ENCRYPTION_KEY=super-awesome-secret-key
+      - GOALERT_PUBLIC_URL=http://localhost:8081
